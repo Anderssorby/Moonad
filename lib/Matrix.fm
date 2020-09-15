@@ -9,13 +9,14 @@ Matrix.fill<A : Type>(value : A, rows: Nat, cols: Nat): Matrix(A, rows, cols)
     Matrix.new<A, rows, cols>(rows_vec)
 
 
-Matrix.show(m : Matrix<Nat, rows, cols>): String
-    let m = "[]"
-    ?a
+Matrix.show<A : Type, rows : Nat, cols : Nat>(f : A -> String, m : Matrix(A, rows, cols)): String
+  case m:
+    | Vector.show<Vector(A,m.cols), m.rows>(Vector.show<A, m.cols>(f), m.vec);
+    : String;
 
 Matrix.test: IO(Unit)
   do IO {
-    let m = Matrix.fill<Nat>(1,2,2);
-    IO.print(Matrix.show(m));
+    let m = Matrix.fill<Nat>(10,2,2);
+    IO.print(Matrix.show<Nat,2,2>(Nat.show, m));
   }
 
