@@ -1,0 +1,13 @@
+Vector.add<size : Nat>(u: Vector(Nat, size), v: Vector(Nat,size)): Vector(Nat, size)
+  case u:
+  | Vector.nil;
+  | case v:
+    | Vector.nil;
+    | Vector.ext<Nat, size>(Nat.add(u.head, v.head), Vector.add<Nat.pred(size)>(u.tail, v.tail));;
+
+Vector.add.test: IO(Unit)
+  do IO {
+    let u = Vector.fill<Nat>(3, 3);
+    let v = Vector.fill<Nat>(3, 4);
+    IO.print(Vector.show<Nat,3>(Nat.show, u));
+  }

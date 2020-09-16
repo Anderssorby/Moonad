@@ -20,3 +20,13 @@ Matrix.test: IO(Unit)
     IO.print(Matrix.show<Nat,2,2>(Nat.show, m));
   }
 
+
+Matrix.add<A : Type,  (m1: Matrix(A, r, c), m2: Matrix(A, r, c)): Matrix(A, r, c)
+  case m1:
+  | Matrix.new(vec1) =>
+    case m2:
+    | Matrix.new(vec2) =>
+      for (r1, r2) in zip(vec1, vec2)
+        Vector.add(r1, r2)
+      end
+

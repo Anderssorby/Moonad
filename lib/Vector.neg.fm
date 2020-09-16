@@ -1,0 +1,5 @@
+// Negate Vector
+Vector.neg<A : Type, size : Nat>(v: Vector(A, size)): Vector(A, size)
+  case v:
+  | Vector.nil;
+  | Vector.ext<A, size>(Nat.neg(v.head), Vector.neg<A,size>(v.tail));
