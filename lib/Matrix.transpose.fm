@@ -1,0 +1,3 @@
+Matrix.transpose<A : Type, rows : Nat, cols : Nat>(m : Matrix(A, rows, cols)): Matrix(A, cols, rows)
+  let n_vec = Vector.map<A>(m.vec, (r) r.head)
+  Matrix.new<A, cols, rows>(vec: n_vec)

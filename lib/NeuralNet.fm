@@ -1,0 +1,27 @@
+// A Keras inspired NeuralNet framework
+T NeuralNet
+| NeuralNet.new(architecture: NeuralNet.Architecture);
+
+T NeuralNet.Dim
+| NeuralNet.Dim.one<size: Nat>;
+| NeuralNet.Dim.two<one: Nat, two: Nat>;
+
+// An architecture
+T NeuralNet.Architecture ~ (inputDim: NeuralNet.Dim, outputDim: NeuralNet.Dim)
+| NeuralNet.Architecture.output(outputLayer: NeuralNet.Layer(inputDim: NeuralNet.Dim, outputDim: NeuralNet.Dim))
+  ~ (inputDim, outputDim);
+| NeuralNet.Architecture.first(inputLayer: NeuralNet.Layer(inputDim), nextLayers: NeuralNet.Architecture(_, outputDim))
+  ~ (inputDim, outputDim);
+
+// A layer
+T NeuralNet.Layer ~ (inputDim: NeuralNet.Dim, outputDim: NeuralNet.Dim)
+| NeuralNet.Layer.dense(dim: NeuralNet.Dim);
+
+
+NeuralNet.test: NeuralNet
+  let size = 10
+  let a = NeuralNet.Architecture.first(
+    inputLayer: NeuralNet.Layer.dense(dim: NeuralNet.Dim.one<size>()),
+    nextLayers: NeuralNet.Architecture.output(outputLayer: NeuralNet.Layer.dense(dim: NeuralNet.Dim.one(5)))
+  )
+  NeuralNet.new(architecture: a)
