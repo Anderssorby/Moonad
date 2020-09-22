@@ -1,0 +1,43 @@
+// The game screen is 240x160 pixels
+GameOfLife.scr_mid: Pos32
+  Pos32.new(120u, 80u, 0u)
+
+// The game screen width
+GameOfLife.scr_w: U32
+  U32.mul(Pos32.get_x(GameOfLife.scr_mid), 2u)
+
+// The game screen height
+GameOfLife.scr_h: U32
+  U32.mul(Pos32.get_y(GameOfLife.scr_mid), 2u)
+
+// Startup
+GameOfLife.start: App(GameOfLife.Game)
+  let screen = Image3D.alloc_capacity(524288u)
+  App.new<>
+  // Initial state
+  | let game_usr = Word.zero(160)
+    let game_pos = Map.new<>
+    let game_map = GameOfLife.Map.build(GameOfLife.map_source)
+    GameOfLife.Game.new(game_usr, game_pos, game_map, GameOfLife.Screen.game('.'));
+  // Render function
+  | (game) App.Render.vox(GameOfLife.draw(game, screen));
+  // Event handlers
+  | (event, game)
+    case event:
+    | init => [
+      App.Action.resize<>(GameOfLife.scr_w, GameOfLife.scr_h),
+      let game = GameOfLife.Game.set_usr(event.addr, game)
+      let game = GameOfLife.Game.cmd('j', event.addr, game) // inits hero
+      App.Action.state<>(game),
+    ];
+    | tick => [App.Action.state<>(GameOfLife.Game.tick(game))];
+    | xkey => [
+      open game:
+      let chr = GameOfLife.Input.char(event.down, event.code)
+      App.Action.state<>(GameOfLife.Game.cmd(chr, game.usr, game))
+    ];
+    | post => [];;
+
+// Startup
+GameOfLife: App(GameOfLife.Game)
+  GameOfLife.start()
