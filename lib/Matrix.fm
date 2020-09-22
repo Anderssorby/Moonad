@@ -21,12 +21,16 @@ Matrix.test: IO(Unit)
   }
 
 
-Matrix.add<A : Type,  (m1: Matrix(A, r, c), m2: Matrix(A, r, c)): Matrix(A, r, c)
+Matrix.add<r : Nat, c : Nat>(m1: Matrix(Nat, r, c), m2: Matrix(Nat, r, c)): Matrix(A, r, c)
+  def rec<r : Nat, c : Nat>(vec1: Vector(Vector(Nat, r, c)), vec2: Vector(Vector(Nat, r, c))): Vector(Vector(Nat, r, c)))
+    case vec1:
+    | Vector.nil<Nat>;
+    | case vec2:
+      | Vector.nil<Nat>;
+      | Vector.ext<Nat>(head: Vector.add(vec1.head, vec2.head), tail: rec<vec1.size,vec2.size>(vec1.tail, vec2.tail));;
   case m1:
   | Matrix.new(vec1) =>
     case m2:
     | Matrix.new(vec2) =>
-      for (r1, r2) in zip(vec1, vec2)
-        Vector.add(r1, r2)
-      end
+      Matrix.new<Nat, r, c>(vec: rec<r, c>(vec1, vec2))
 
