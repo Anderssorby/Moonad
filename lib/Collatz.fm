@@ -1,0 +1,21 @@
+Collatz.run: IO(Unit)
+  do IO {
+    var val_str = IO.prompt("start value:");
+    let start = Nat.parse_decimal(val_str);
+    Collatz.step(start, 0);
+  }
+
+Collatz.step(start: Nat, steps: Nat): IO(Unit)
+  let next = Collatz.next(start);
+  do IO {
+    IO.print(Nat.show(next));
+    case Nat.eql(next, 1):
+    | Bool.true => IO.print(String.concat("Loop found! orbit=", Nat.show(steps)));
+    | Bool.false => Collatz.step(next, Nat.add(steps, 1));;
+  }
+
+Collatz.next(start: Nat): Nat
+  if Nat.odd(start) then
+    Nat.add(Nat.mul(3, start), 1)
+  else
+    Nat.div(start, 2)
